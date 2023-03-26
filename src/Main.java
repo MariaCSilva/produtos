@@ -1,16 +1,20 @@
+import db.ProdutosDB;
 import models.Produto;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    static ProdutosDB produtosDB = new ProdutosDB();
     public static void main(String[] args) throws Exception {
         System.out.println("---PEDIDO DE VENDAS");
         int option;
         do {
             Scanner scanner = new Scanner(System.in);
             System.out.println("1 - Cadastrar produto");
+            System.out.println("2 - Listar produtos");
             System.out.println("0 - Sair");
             System.out.print("Qual operação você deseja realizar: ");
             option = scanner.nextInt();
@@ -37,13 +41,20 @@ public class Main {
                 String dataString = scanner.next() ;
                 Date dataValidade = new SimpleDateFormat("dd/MM/yyyy").parse(dataString);
                 Produto novoProduto =  new Produto(id,descricao,preco,dataValidade);
+                produtosDB.addNovoProduto(novoProduto);
+                break;
 
-                System.out.println("Produto criado com sucesso: ");
-                System.out.println("----ID: "+novoProduto.getId());
-                System.out.println("----Descrição: "+novoProduto.getDescricao());
-                System.out.println("----Preço: "+novoProduto.getPreco());
-                System.out.println("----Data de validade: "+novoProduto.getDataValidade());
-                System.out.println("------------------------------------------------");
+            }
+            case 2:{
+                List<Produto> listaDeProdutos = produtosDB.getProdutosList();
+                for (Produto produto: listaDeProdutos){
+                    System.out.println("----ID: "+produto.getId());
+                    System.out.println("----Descrição: "+produto.getDescricao());
+                    System.out.println("----Preço: "+produto.getPreco());
+                    System.out.println("----Data de validade: "+produto.getDataValidade());
+                    System.out.println("------------------------------------------------");
+                }
+                break;
             }
         }
     }
